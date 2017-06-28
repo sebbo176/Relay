@@ -10,6 +10,8 @@
 // Model types
 class User {}
 class Widget {}
+export class Game {}
+export class HidingSpot{}
 
 // Mock data
 var viewer = new User();
@@ -21,6 +23,39 @@ var widgets = ['What\'s-it', 'Who\'s-it', 'How\'s-it'].map((name, i) => {
   widget.id = `${i}`;
   return widget;
 });
+const game = new Game();
+game.id = '1';
+
+const hidingSpots = [];
+(cunction() {
+  let hidingsSpot;
+  const indexOfSpotWithTreasure = Math.floor(Math.random() * 9);
+  for (let i = 0; i < 9; i++) {
+    hidingSpot = new HidingSpot();
+    hidingSpot.id = `${i}`;
+    hidingSpot.hasTreasure = (i === indexOfSpotWithTreasure);
+    hidingSpot.hasBeenChecked = false;
+    hidingSpot.push(hidingSpot);
+  }
+})();
+
+let turnsRemaining = 3;
+
+export function checkHidingSpotForTreasure(id) {
+  if(hidingSpots.some(hs => hs.hasTreasure && hs.hasBeenChecked)){
+    return;
+  }
+  turnsRemaining--;
+  const hidingSpot = getHidingSpot(id);
+  hidingSpot.hasBeenChecked = true;
+}
+export function getHidingSpot(id){
+  return hidingSpots.find(hs => hs.id === id);
+}
+export function getGame() {return game;}
+export function getHidingSpots() {return hidingSpots;}
+export function getTurnsRemaining() {return turnsRemaining;}
+
 
 module.exports = {
   // Export methods that your schema can use to interact with your database
