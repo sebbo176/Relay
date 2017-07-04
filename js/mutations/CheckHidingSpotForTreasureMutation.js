@@ -1,5 +1,6 @@
 import Relay from 'react-relay';
 
+//Mutations and stuff
 export default class CheckHidingSpotForTreasureMutation extends Relay.Mutation {
   static fragments = {
     game: () => RelayQL`
