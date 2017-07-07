@@ -98,7 +98,7 @@ const hidingSpotType = new GraphQLObjectType({
         if (hidingSpot.hasBeenChecked) {
           return hidingSpot.hasTreasure;
         } else {
-          return null;
+          return null;  // Shh... it's a secret!
         }
       },
     },
@@ -120,36 +120,36 @@ const {connectionType: hidingSpotConnection} =
     }),
   });
 
-const CheckHidingSpotForTreasureMutation = mutationWithClientMutationId({
-  name: 'CheckHidingSpotForTreasure',
-  inputFields: {
-    id: { type: new GraphQLNonNull(GraphQLID) },
-  },
-  outputFields: {
-    hidingSpot: {
-      type: hidingSpotType,
-      resolve: ({localHidingSpotId}) => getHidingSpot(localHidingSpotId),
+  const CheckHidingSpotForTreasureMutation = mutationWithClientMutationId({
+    name: 'CheckHidingSpotForTreasure',
+    inputFields: {
+      id: { type: new GraphQLNonNull(GraphQLID) },
     },
-    game: {
-      type: gameType,
-      resolve: () => getGame(),
+    outputFields: {
+      hidingSpot: {
+        type: hidingSpotType,
+        resolve: ({localHidingSpotId}) => getHidingSpot(localHidingSpotId),
+      },
+      game: {
+        type: gameType,
+        resolve: () => getGame(),
+      },
     },
-  },
-  mutateAndGetPayload: ({id}) => {
-    const localHidingSpotId = fromGlobalId(id).id;
-    checkHidingSpotForTreasure(localHidingSpotId);
-    return {localHidingSpotId};
-  },
-});
+    mutateAndGetPayload: ({id}) => {
+      const localHidingSpotId = fromGlobalId(id).id;
+      checkHidingSpotForTreasure(localHidingSpotId);
+      return {localHidingSpotId};
+    },
+  });
 
-const mutationType = new GraphQLObjectType({
-  name: 'Mutation',
-  fields: () => ({
-    checkHidingSpotForTreasure: CheckHidingSpotForTreasureMutation,
-  }),
-});
+  const mutationType = new GraphQLObjectType({
+    name: 'Mutation',
+    fields: () => ({
+      checkHidingSpotForTreasure: CheckHidingSpotForTreasureMutation,
+    }),
+  });
 
-export const Schema = new GraphQLSchema({
-  query: queryType,
-  mutation: mutationType
-});
+  export const Schema = new GraphQLSchema({
+    query: queryType,
+    mutation: mutationType
+  });

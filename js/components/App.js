@@ -1,14 +1,13 @@
 import CheckHidingSpotForTreasureMutation from '../mutations/CheckHidingSpotForTreasureMutation';
-
 import React from 'react';
 import Relay from 'react-relay';
 
 class App extends React.Component {
-  _getHidingspotStyle(hidingSpot) {
+  _getHidingSpotStyle(hidingSpot) {
     let color;
-    if(this.props.relay.hasOptimisticUpdate(hidingSpot)) {
+    if (this.props.relay.hasOptimisticUpdate(hidingSpot)) {
       color = 'lightGrey';
-    }  else if (hidingSpot.hasBeenChecked) {
+    } else if (hidingSpot.hasBeenChecked) {
       if (hidingSpot.hasTreasure) {
         color = 'blue';
       } else {
@@ -18,15 +17,14 @@ class App extends React.Component {
       color = 'black';
     }
     return {
-      backgroudColor: color,
+      backgroundColor: color,
       cursor: this._isGameOver() ? null : 'pointer',
       display: 'inline-block',
       height: 100,
       marginRight: 10,
-      width: 100
+      width: 100,
     };
   }
-
   _handleHidingSpotClick(hidingSpot) {
     if (this._isGameOver()) {
       return;
@@ -38,29 +36,25 @@ class App extends React.Component {
       })
     );
   }
-
   _hasFoundTreasure() {
     return (
       this.props.game.hidingSpots.edges.some(edge => edge.node.hasTreasure)
     );
   }
-
   _isGameOver() {
     return !this.props.game.turnsRemaining || this._hasFoundTreasure();
   }
-
   renderGameBoard() {
     return this.props.game.hidingSpots.edges.map(edge => {
       return (
         <div
-        key={edge.node.id}
-        onClick={this._handleHidingSpotClick.bind(this, edge.node)}
-        style={this._getHidingSpotStyle(edge.node)}
+          key={edge.node.id}
+          onClick={this._handleHidingSpotClick.bind(this, edge.node)}
+          style={this._getHidingSpotStyle(edge.node)}
         />
       );
     });
   }
-
   render() {
     let headerText;
     if (this.props.relay.getPendingTransactions(this.props.game)) {
@@ -76,7 +70,7 @@ class App extends React.Component {
       <div>
         <h1>{headerText}</h1>
         {this.renderGameBoard()}
-        <p>Turns remaining: {this.props.game.turnsRemaining} </p>
+        <p>Turns remaining: {this.props.game.turnsRemaining}</p>
       </div>
     );
   }
